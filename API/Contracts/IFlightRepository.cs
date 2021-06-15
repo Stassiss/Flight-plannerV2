@@ -1,4 +1,5 @@
-﻿using API.Entities.DataTransferObjects.Flights;
+﻿using API.Entities;
+using API.Entities.DataTransferObjects.Flights;
 
 namespace API.Contracts
 {
@@ -8,5 +9,7 @@ namespace API.Contracts
         FlightOutDto GetFlightById(int id);
         void Delete(int id);
         void Clear();
+        PageResult SearchFlights(SearchRequestDto search);
+        void CompareAirportsNames(string a, string b);
     }
 }

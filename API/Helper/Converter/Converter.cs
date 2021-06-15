@@ -13,5 +13,10 @@ namespace API.Helper.Converter
         {
             return DateTime.Parse(dateTimeString);
         }
+
+        public static string TrimToLowerString(this string str)
+        {
+            return str.Trim().ToLower();
+        }
     }
 }
