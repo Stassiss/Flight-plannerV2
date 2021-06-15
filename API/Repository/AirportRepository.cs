@@ -12,7 +12,7 @@ namespace API.Repository
     public class AirportRepository : IAirportRepository
     {
         private readonly AppDbContext _dbContext;
-        private object _lock = new object();
+        private static readonly object _lock = new object();
         public AirportRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
