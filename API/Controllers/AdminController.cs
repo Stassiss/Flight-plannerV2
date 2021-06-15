@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using API.Contracts;
 using API.Entities.DataTransferObjects.Flights;
 using API.Exceptions;
@@ -21,7 +20,7 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet("flights/{id}")]
+        [HttpGet("flights/{id}", Name = "Flight")]
         public IActionResult GetFlightsById(int id)
         {
             try
@@ -37,13 +36,32 @@ namespace API.Controllers
 
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Put(FlightInDto flightInDto)
+        [HttpPut("flights")]
+        public IActionResult PutFlight([FromBody] FlightInDto flightInDto)
         {
-            return Ok();
+            try
+            {
+                var flightOutDto = _repository.PutFlight(flightInDto);
+
+                return Created("Flight", flightOutDto);
+            }
+            catch (SameFlightException e)
+            {
+                Console.WriteLine(e);
+                return Conflict();
+            }
+            catch (SameAirportException e)
+            {
+                Console.WriteLine(e);
+                return BadRequest();
+            }
+            catch (DateFormatException e)
+            {
+                Console.WriteLine(e);
+                return BadRequest();
+            }
         }
 
-        // DELETE api/<AdminController>/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -57,7 +75,7 @@ namespace API.Controllers
                 Console.WriteLine(e);
                 return Ok();
             }
-
         }
+
     }
 }

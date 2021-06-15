@@ -3,10 +3,15 @@ using API.Entities.Models;
 
 namespace API.Entities
 {
-    public static class AppDbContext
+    public class AppDbContext
     {
-        public static List<Flight> Flights => new List<Flight>();
-        public static List<Airport> Airports => new List<Airport>();
+        public AppDbContext()
+        {
+            Flights = new List<Flight>();
+            Airports = new List<Airport>();
+        }
+        public List<Flight> Flights { get; }
+        public List<Airport> Airports { get; }
 
     }
 }
