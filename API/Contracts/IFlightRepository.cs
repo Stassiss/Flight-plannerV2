@@ -7,5 +7,6 @@ namespace API.Contracts
         void PutFlight(FlightInDto flightInDto);
         FlightOutDto GetFlightById(int id);
         void Delete(int id);
+        void Clear();
     }
 }
