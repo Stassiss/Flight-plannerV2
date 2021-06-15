@@ -13,7 +13,7 @@ namespace API.Repository
     {
         private readonly IAirportRepository _airportRepository;
         private readonly AppDbContext _dbContext;
-        private object _lock = new object();
+        private static readonly object _lock = new object();
         public FlightRepository(IAirportRepository airportRepository, AppDbContext dbContext)
         {
             _airportRepository = airportRepository;

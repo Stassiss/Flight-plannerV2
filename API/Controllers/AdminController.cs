@@ -13,7 +13,7 @@ namespace API.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IFlightRepository _repository;
-        private object _lock = new object();
+        private static readonly object _lock = new object();
         public AdminController(IFlightRepository repository)
         {
             _repository = repository;

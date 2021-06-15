@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using API.Contracts;
-using API.Entities;
 using API.Entities.DataTransferObjects.Flights;
 using API.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +13,7 @@ namespace API.Controllers
     {
         private readonly IAirportRepository _airportRepository;
         private readonly IFlightRepository _flightRepository;
-        private object _lock = new object();
+        private static readonly object _lock = new object();
         public CustomerApiController(IAirportRepository airportRepository, IFlightRepository flightRepository)
         {
             _airportRepository = airportRepository;

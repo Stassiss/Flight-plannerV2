@@ -9,7 +9,7 @@ namespace API.Controllers
     public class TestApiController : ControllerBase
     {
         private readonly IFlightRepository _flightRepository;
-
+        private static readonly object _lock = new object();
         public TestApiController(IFlightRepository flightRepository)
         {
             _flightRepository = flightRepository;
@@ -18,7 +18,10 @@ namespace API.Controllers
         [HttpPost("clear")]
         public void Delete()
         {
-            _flightRepository.Clear();
+            lock (_lock)
+            {
+                _flightRepository.Clear();
+            }
         }
     }
 }
