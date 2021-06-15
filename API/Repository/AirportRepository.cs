@@ -12,27 +12,33 @@ namespace API.Repository
     public class AirportRepository : IAirportRepository
     {
         private readonly AppDbContext _dbContext;
-
+        private object _lock = new object();
         public AirportRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
         public void AddAirport(Airport airport)
         {
-            _dbContext.Airports.Add(airport);
+            lock (_lock)
+            {
+                _dbContext.Airports.Add(airport);
+            }
         }
 
         public List<AirportOutDto> SearchAirports(string search)
         {
-            var airports = _dbContext.Airports.Where(x => TrimToLowerString(x.Country).Contains(TrimToLowerString(search))
-                                                          || TrimToLowerString(x.City).Contains(TrimToLowerString(search))
-                                                          || TrimToLowerString(x.AirportName).Contains(TrimToLowerString(search))).ToList();
-            if (!airports.Any())
+            lock (_lock)
             {
-                throw new NotFoundException(nameof(AirportInDto), nameof(SearchAirports), "no id");
-            }
+                var airports = _dbContext.Airports.Where(x => TrimToLowerString(x.Country).Contains(TrimToLowerString(search))
+                                                              || TrimToLowerString(x.City).Contains(TrimToLowerString(search))
+                                                              || TrimToLowerString(x.AirportName).Contains(TrimToLowerString(search))).ToList();
+                if (!airports.Any())
+                {
+                    throw new NotFoundException(nameof(AirportInDto), nameof(SearchAirports), "no id");
+                }
 
-            return airports.Select(Mapper.MapAirportToAirportOutDto).ToList();
+                return airports.Select(Mapper.MapAirportToAirportOutDto).ToList();
+            }
         }
 
         private string TrimToLowerString(string str)

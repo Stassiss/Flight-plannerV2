@@ -13,7 +13,7 @@ namespace API.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IFlightRepository _repository;
-
+        private object _lock = new object();
         public AdminController(IFlightRepository repository)
         {
             _repository = repository;
@@ -23,59 +23,66 @@ namespace API.Controllers
         [HttpGet("flights/{id}", Name = "Flight")]
         public IActionResult GetFlightsById(int id)
         {
-            try
+            lock (_lock)
             {
-                var flightOutDto = _repository.GetFlightById(id);
-                return Ok(flightOutDto);
+                try
+                {
+                    var flightOutDto = _repository.GetFlightById(id);
+                    return Ok(flightOutDto);
+                }
+                catch (NotFoundException e)
+                {
+                    Console.WriteLine(e);
+                    return NotFound();
+                }
             }
-            catch (NotFoundException e)
-            {
-                Console.WriteLine(e);
-                return NotFound();
-            }
-
         }
 
         [HttpPut("flights")]
         public IActionResult PutFlight([FromBody] FlightInDto flightInDto)
         {
-            try
+            lock (_lock)
             {
-                var flightOutDto = _repository.PutFlight(flightInDto);
+                try
+                {
+                    var flightOutDto = _repository.PutFlight(flightInDto);
 
-                return Created("Flight", flightOutDto);
-            }
-            catch (SameFlightException e)
-            {
-                Console.WriteLine(e);
-                return Conflict();
-            }
-            catch (SameAirportException e)
-            {
-                Console.WriteLine(e);
-                return BadRequest();
-            }
-            catch (DateFormatException e)
-            {
-                Console.WriteLine(e);
-                return BadRequest();
+                    return Created("Flight", flightOutDto);
+                }
+                catch (SameFlightException e)
+                {
+                    Console.WriteLine(e);
+                    return Conflict();
+                }
+                catch (SameAirportException e)
+                {
+                    Console.WriteLine(e);
+                    return BadRequest();
+                }
+                catch (DateFormatException e)
+                {
+                    Console.WriteLine(e);
+                    return BadRequest();
+                }
             }
         }
 
         [HttpDelete("flights/{id}")]
         public IActionResult Delete(int id)
         {
-            try
+            lock (_lock)
             {
-                _repository.Delete(id);
-                return Ok();
-            }
-            catch (NotFoundException e)
-            {
-                Console.WriteLine(e);
-                return Ok();
+                try
+                {
+                    _repository.Delete(id);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return Ok();
+                }
             }
         }
-
     }
 }
