@@ -1,6 +1,8 @@
-﻿using API.Entities.DataTransferObjects.Airports;
+﻿using API.Entities;
+using API.Entities.DataTransferObjects.Airports;
 using API.Entities.DataTransferObjects.Flights;
 using API.Entities.Models;
+using API.Helper.Converter;
 
 namespace API.Helper
 {
@@ -16,16 +18,21 @@ namespace API.Helper
             return new(airportInDto);
         }
 
-        public static Flight MapFlightInDtoToFlight(FlightInDto flightInDto)
+        public static Flight MapFlightInDtoToFlight(FlightInDto flightInDto, AppDbContext dbContext)
         {
             var flight = new Flight(
                 MapAirportInDtoToAirport(flightInDto.From),
                 MapAirportInDtoToAirport(flightInDto.To),
                 flightInDto.Carrier,
-                flightInDto.DepartureTime,
-                flightInDto.ArrivalTime);
+                flightInDto.DepartureTime.ConvertStringToDateTime(),
+                flightInDto.ArrivalTime.ConvertStringToDateTime(), dbContext);
 
             return flight;
+        }
+
+        public static FlightOutDto MapFlightToFlightOutDto(Flight flight)
+        {
+            return new(flight);
         }
     }
 }

@@ -6,9 +6,15 @@ namespace API.Repository
 {
     public class AirportRepository : IAirportRepository
     {
+        private readonly AppDbContext _dbContext;
+
+        public AirportRepository(AppDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public void AddAirport(Airport airport)
         {
-            AppDbContext.Airports.Add(airport);
+            _dbContext.Airports.Add(airport);
         }
     }
 }

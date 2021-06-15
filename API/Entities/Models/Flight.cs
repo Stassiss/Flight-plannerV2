@@ -1,12 +1,20 @@
-﻿using System.Linq;
-using Microsoft.VisualBasic;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace API.Entities.Models
 {
     public class Flight
     {
-        public Flight(Airport from, Airport to, string carrier, DateAndTime departureTime, DateAndTime arrivalTime)
+        private readonly AppDbContext _dbContext;
+
+        public Flight(Airport from,
+            Airport to, string carrier,
+            DateTime departureTime,
+            DateTime arrivalTime,
+            AppDbContext dbContext)
         {
+            _dbContext = dbContext;
             Id = GenerateId();
             From = from;
             To = to;
@@ -16,15 +24,25 @@ namespace API.Entities.Models
         }
 
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
         public Airport From { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
         public Airport To { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
         public string Carrier { get; set; }
-        public DateAndTime DepartureTime { get; set; }
-        public DateAndTime ArrivalTime { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public DateTime DepartureTime { get; set; }
+
+        [Required(ErrorMessage = "Required field!")]
+        public DateTime ArrivalTime { get; set; }
 
         private int GenerateId()
         {
-            return AppDbContext.Flights.Any() ? AppDbContext.Flights.Count + 1 : 0;
+            return _dbContext.Flights.Any() ? _dbContext.Flights.Count + 1 : 1;
         }
     }
 }
