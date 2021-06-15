@@ -98,7 +98,7 @@ namespace API.Repository
             lock (_lock)
             {
                 var flights = _dbContext.Flights.Where(
-                    x => x.DepartureTime.ConvertDateTimeToString() == search.DepartureDate
+                    x => x.DepartureTime.ConvertDateTimeToString().Substring(0, 10) == search.DepartureDate
                          && x.From.AirportName.TrimToLowerString() == search.From.TrimToLowerString()
                          && x.To.AirportName.TrimToLowerString() == search.To.TrimToLowerString()).ToList();
                 var flightsOutDto = flights.Select(Mapper.MapFlightToFlightOutDto).ToList();
@@ -131,7 +131,7 @@ namespace API.Repository
                     if (x.ArrivalTime.ConvertDateTimeToString() != flight.ArrivalTime ||
                         x.DepartureTime.ConvertDateTimeToString() != flight.DepartureTime) return false;
 
-                    if (!string.Equals(x.Carrier, flight.Carrier, StringComparison.CurrentCultureIgnoreCase)) return false;
+                    if (!string.Equals(x.Carrier.TrimToLowerString(), flight.Carrier.TrimToLowerString())) return false;
 
                     try
                     {
