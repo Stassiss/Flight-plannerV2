@@ -97,7 +97,6 @@ namespace API.Repository
                 try
                 {
                     CompareAirportsNames(x.From, Mapper.MapAirportInDtoToAirport(flight.From));
-                    CompareAirportsNames(x.To, Mapper.MapAirportInDtoToAirport(flight.To));
                     return false;
                 }
                 catch (SameAirportException e)
