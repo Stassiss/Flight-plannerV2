@@ -62,7 +62,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("flights/{id}")]
         public IActionResult Delete(int id)
         {
             try
