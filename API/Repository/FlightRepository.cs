@@ -52,5 +52,11 @@ namespace API.Repository
 
             AppDbContext.Flights.Remove(flight);
         }
+
+        public void Clear()
+        {
+            AppDbContext.Flights.Clear();
+            AppDbContext.Airports.Clear();
+        }
     }
 }
