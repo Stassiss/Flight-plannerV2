@@ -1,5 +1,6 @@
 using API.Contracts;
 using API.Entities;
+using API.Extensions;
 using API.Helper.Auth;
 using API.Repository;
 using Microsoft.AspNetCore.Authentication;
@@ -30,8 +31,9 @@ namespace API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
-            services.AddSingleton<AppDbContext>();
 
+            // Add database
+            services.ConfigureSqlContext(Configuration);
 
             // configure basic authentication 
             services.AddAuthentication("BasicAuthentication")
