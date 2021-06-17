@@ -3,7 +3,6 @@ using System.Linq;
 using API.Contracts;
 using API.Entities;
 using API.Entities.DataTransferObjects.Airports;
-using API.Entities.Models;
 using API.Exceptions;
 using API.Helper;
 
@@ -17,19 +16,14 @@ namespace API.Repository
         {
             _dbContext = dbContext;
         }
-        public void AddAirport(Airport airport)
-        {
-            lock (_lock)
-            {
-                _dbContext.Airports.Add(airport);
-            }
-        }
 
         public List<AirportOutDto> SearchAirports(string search)
         {
             lock (_lock)
             {
-                var airports = _dbContext.Airports.Where(x => TrimToLowerString(x.Country).Contains(TrimToLowerString(search))
+                var airportsFromDb = _dbContext.Airports.ToList();
+
+                var airports = airportsFromDb.Where(x => TrimToLowerString(x.Country).Contains(TrimToLowerString(search))
                                                               || TrimToLowerString(x.City).Contains(TrimToLowerString(search))
                                                               || TrimToLowerString(x.AirportName).Contains(TrimToLowerString(search))).ToList();
                 if (!airports.Any())
