@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using API.Entities.Models;
+﻿using API.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Entities
 {
-    public class AppDbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext()
+        public AppDbContext(DbContextOptions options) : base(options)
         {
-            Flights = new List<Flight>();
-            Airports = new List<Airport>();
         }
 
-        public List<Flight> Flights { get; }
-        public List<Airport> Airports { get; }
+        public DbSet<Flight> Flights { get; set; }
+        public DbSet<Airport> Airports { get; set; }
 
     }
 }

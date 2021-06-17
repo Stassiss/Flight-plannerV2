@@ -15,17 +15,24 @@ namespace API.Helper
 
         public static Airport MapAirportInDtoToAirport(AirportInDto airportInDto)
         {
-            return new(airportInDto);
+            return new Airport()
+            {
+                Country = airportInDto.Country,
+                City = airportInDto.City,
+                AirportName = airportInDto.AirportName
+            };
         }
 
-        public static Flight MapFlightInDtoToFlight(FlightInDto flightInDto, AppDbContext dbContext)
+        public static Flight MapFlightInDtoToFlight(FlightInDto flightInDto)
         {
-            var flight = new Flight(
-                MapAirportInDtoToAirport(flightInDto.From),
-                MapAirportInDtoToAirport(flightInDto.To),
-                flightInDto.Carrier,
-                flightInDto.DepartureTime.ConvertStringToDateTime(),
-                flightInDto.ArrivalTime.ConvertStringToDateTime(), dbContext);
+            var flight = new Flight()
+            {
+                From = MapAirportInDtoToAirport(flightInDto.From),
+                To = MapAirportInDtoToAirport(flightInDto.To),
+                Carrier = flightInDto.Carrier,
+                DepartureTime = flightInDto.DepartureTime.ConvertStringToDateTime(),
+                ArrivalTime = flightInDto.ArrivalTime.ConvertStringToDateTime()
+            };
 
             return flight;
         }

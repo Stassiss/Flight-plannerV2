@@ -5,13 +5,7 @@ namespace API.Entities.Models
 {
     public class Airport
     {
-        public Airport(AirportInDto airportInDto)
-        {
-            Country = airportInDto.Country;
-            City = airportInDto.City;
-            AirportName = airportInDto.AirportName;
-        }
-
+        public int Id { get; set; }
         [Required(ErrorMessage = "Required field!")]
         public string Country { get; set; }
 

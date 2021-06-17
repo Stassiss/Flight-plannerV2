@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using API.Contracts;
 using API.Entities;
@@ -29,7 +30,7 @@ namespace API.Repository
                 CompareAirportsNames(flightInDto.From.AirportName,
                     flightInDto.To.AirportName);
 
-                var flight = Mapper.MapFlightInDtoToFlight(flightInDto, _dbContext);
+                var flight = Mapper.MapFlightInDtoToFlight(flightInDto);
 
                 try
                 {
@@ -53,7 +54,7 @@ namespace API.Repository
         {
             lock (_lock)
             {
-                var flight = _dbContext.Flights.Find(x => x.Id == id);
+                var flight = _dbContext.Flights.Find(id);
 
                 if (flight == null)
                 {
@@ -73,7 +74,7 @@ namespace API.Repository
         {
             lock (_lock)
             {
-                var flight = _dbContext.Flights.Find(x => x.Id == id);
+                var flight = _dbContext.Flights.Find(id);
 
                 if (flight == null)
                 {
@@ -88,8 +89,8 @@ namespace API.Repository
         {
             lock (_lock)
             {
-                _dbContext.Flights.Clear();
-                _dbContext.Airports.Clear();
+                _dbContext.Flights.RemoveRange(_dbContext.Flights);
+                _dbContext.Airports.RemoveRange(_dbContext.Airports);
             }
         }
 
@@ -124,9 +125,12 @@ namespace API.Repository
 
         private bool CompareFlights(FlightInDto flight)
         {
+
             lock (_lock)
             {
-                return _dbContext.Flights.Any(x =>
+                var flights = _dbContext.Flights.ToList();
+
+                return flights.Any(x =>
                 {
                     if (x.ArrivalTime.ConvertDateTimeToString() != flight.ArrivalTime ||
                         x.DepartureTime.ConvertDateTimeToString() != flight.DepartureTime) return false;
