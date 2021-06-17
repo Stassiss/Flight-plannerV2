@@ -6,6 +6,7 @@ namespace API.Entities.Models
 {
     public class Flight
     {
+        [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Required field!")]

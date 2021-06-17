@@ -1,5 +1,4 @@
-﻿using API.Entities;
-using API.Entities.DataTransferObjects.Airports;
+﻿using API.Entities.DataTransferObjects.Airports;
 using API.Entities.DataTransferObjects.Flights;
 using API.Entities.Models;
 using API.Helper.Converter;

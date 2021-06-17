@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using API.Contracts;
 using API.Entities;
@@ -7,6 +6,7 @@ using API.Entities.DataTransferObjects.Flights;
 using API.Exceptions;
 using API.Helper;
 using API.Helper.Converter;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository
 {
@@ -32,12 +32,12 @@ namespace API.Repository
 
                 var flight = Mapper.MapFlightInDtoToFlight(flightInDto);
 
+
                 try
                 {
                     CheckIfFlightInDb(flightInDto);
                     _dbContext.Flights.Add(flight);
-                    _airportRepository.AddAirport(flight.From);
-                    _airportRepository.AddAirport(flight.To);
+                    _dbContext.SaveChanges();
                 }
                 catch (SameAirportException e)
                 {
@@ -54,7 +54,9 @@ namespace API.Repository
         {
             lock (_lock)
             {
-                var flight = _dbContext.Flights.Find(id);
+                var flight = _dbContext.Flights
+                    .Include(f => f.From)
+                    .Include(f => f.To).FirstOrDefault(x => x.Id == id);
 
                 if (flight == null)
                 {
@@ -74,14 +76,19 @@ namespace API.Repository
         {
             lock (_lock)
             {
-                var flight = _dbContext.Flights.Find(id);
+                var flight = _dbContext.Flights
+                    .Include(f => f.From)
+                    .Include(f => f.To).FirstOrDefault(x => x.Id == id);
 
                 if (flight == null)
                 {
                     throw new NotFoundException(nameof(FlightRepository), nameof(Delete), $"{id}");
                 }
 
+                _dbContext.Airports.RemoveRange(flight.To);
+                _dbContext.Airports.RemoveRange(flight.From);
                 _dbContext.Flights.Remove(flight);
+                _dbContext.SaveChanges();
             }
         }
 
@@ -91,6 +98,7 @@ namespace API.Repository
             {
                 _dbContext.Flights.RemoveRange(_dbContext.Flights);
                 _dbContext.Airports.RemoveRange(_dbContext.Airports);
+                _dbContext.SaveChanges();
             }
         }
 
@@ -98,10 +106,16 @@ namespace API.Repository
         {
             lock (_lock)
             {
-                var flights = _dbContext.Flights.Where(
+                var flightsFromDb = _dbContext.Flights
+                    .Include(f => f.From)
+                    .Include(f => f.To)
+                    .ToList();
+
+                var flights = flightsFromDb.Where(
                     x => x.DepartureTime.ConvertDateTimeToString().Substring(0, 10) == search.DepartureDate
                          && x.From.AirportName.TrimToLowerString() == search.From.TrimToLowerString()
                          && x.To.AirportName.TrimToLowerString() == search.To.TrimToLowerString()).ToList();
+
                 var flightsOutDto = flights.Select(Mapper.MapFlightToFlightOutDto).ToList();
 
                 var result = new PageResult(flightsOutDto);
@@ -128,7 +142,10 @@ namespace API.Repository
 
             lock (_lock)
             {
-                var flights = _dbContext.Flights.ToList();
+                var flights = _dbContext.Flights
+                    .Include(f => f.From)
+                    .Include(f => f.To)
+                    .ToList();
 
                 return flights.Any(x =>
                 {
