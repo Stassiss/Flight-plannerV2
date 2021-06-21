@@ -1,9 +1,8 @@
 ﻿using System;
-using API.Contracts;
-using API.Entities.DataTransferObjects.Flights;
-using API.Exceptions;
+using Contracts;
+using Entities.DataTransferObjects.Flights;
 using Microsoft.AspNetCore.Mvc;
-
+using Repository.Exceptions;
 
 namespace API.Controllers
 {
