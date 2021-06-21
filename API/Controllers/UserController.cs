@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using API.Contracts;
-using API.Entities.Auth;
+using Contracts;
+using Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
