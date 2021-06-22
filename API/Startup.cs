@@ -1,6 +1,7 @@
 using API.Extensions;
 using API.Helper.Auth;
 using Contracts;
+using DataBase;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +44,7 @@ namespace API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAirportRepository, AirportRepository>();
             services.AddScoped<IFlightRepository, FlightRepository>();
+            services.AddScoped<IAppDbContext, AppDbContext>();
 
         }
 

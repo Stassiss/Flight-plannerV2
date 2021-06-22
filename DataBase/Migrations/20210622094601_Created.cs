@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace API.Migrations
+namespace DataBase.Migrations
 {
-    public partial class CreateDatabase : Migration
+    public partial class Created : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

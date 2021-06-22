@@ -1,9 +1,11 @@
-﻿using Entities.Models;
+﻿using Contracts;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Entities
+namespace DataBase
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -11,6 +13,5 @@ namespace Entities
 
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Airport> Airports { get; set; }
-
     }
 }

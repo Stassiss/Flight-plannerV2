@@ -13,9 +13,9 @@ namespace Repository
     public class FlightRepository : IFlightRepository
     {
         private readonly IAirportRepository _airportRepository;
-        private readonly AppDbContext _dbContext;
+        private readonly IAppDbContext _dbContext;
         private static readonly object _lock = new object();
-        public FlightRepository(IAirportRepository airportRepository, AppDbContext dbContext)
+        public FlightRepository(IAirportRepository airportRepository, IAppDbContext dbContext)
         {
             _airportRepository = airportRepository;
             _dbContext = dbContext;
