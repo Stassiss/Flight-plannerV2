@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Contracts;
-using Entities;
 using Entities.DataTransferObjects.Airports;
 using Repository.Exceptions;
 using Repository.Helpers;
@@ -10,9 +9,9 @@ namespace Repository
 {
     public class AirportRepository : IAirportRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IAppDbContext _dbContext;
         private static readonly object _lock = new object();
-        public AirportRepository(AppDbContext dbContext)
+        public AirportRepository(IAppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
