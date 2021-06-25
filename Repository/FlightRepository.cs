@@ -3,6 +3,7 @@ using System.Linq;
 using Contracts;
 using Entities;
 using Entities.DataTransferObjects.Flights;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Exceptions;
 using Repository.Helpers;
@@ -10,15 +11,11 @@ using Repository.Helpers.Converter;
 
 namespace Repository
 {
-    public class FlightRepository : IFlightRepository
+    public class FlightRepository : RepositoryBase<Flight>, IFlightRepository
     {
-        private readonly IAirportRepository _airportRepository;
-        private readonly IAppDbContext _dbContext;
         private static readonly object _lock = new object();
-        public FlightRepository(IAirportRepository airportRepository, IAppDbContext dbContext)
+        public FlightRepository(IAppDbContext dbContext) : base(dbContext)
         {
-            _airportRepository = airportRepository;
-            _dbContext = dbContext;
         }
 
         public FlightOutDto PutFlight(FlightInDto flightInDto)
