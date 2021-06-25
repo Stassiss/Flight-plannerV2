@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Contracts;
+using Converter;
 using Entities.DataTransferObjects.Airports;
 using Entities.Models;
 using Repository.Exceptions;
 using Repository.Helpers;
-using Repository.Helpers.Converter;
 
 namespace Repository
 {

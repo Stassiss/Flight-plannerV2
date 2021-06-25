@@ -1,7 +1,7 @@
-﻿using Entities.DataTransferObjects.Airports;
+﻿using Converter;
+using Entities.DataTransferObjects.Airports;
 using Entities.DataTransferObjects.Flights;
 using Entities.Models;
-using Repository.Helpers.Converter;
 
 namespace Repository.Helpers
 {
@@ -41,8 +41,8 @@ namespace Repository.Helpers
             return new()
             {
                 Id = flight.Id,
-                From = Mapper.MapAirportToAirportOutDto(flight.From),
-                To = Mapper.MapAirportToAirportOutDto(flight.To),
+                From = MapAirportToAirportOutDto(flight.From),
+                To = MapAirportToAirportOutDto(flight.To),
                 Carrier = flight.Carrier,
                 DepartureTime = flight.DepartureTime.ConvertDateTimeToString(),
                 ArrivalTime = flight.ArrivalTime.ConvertDateTimeToString()

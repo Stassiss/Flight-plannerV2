@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Contracts;
+using Converter;
 using Entities;
 using Entities.DataTransferObjects.Flights;
-using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Exceptions;
 using Repository.Helpers;
-using Repository.Helpers.Converter;
 
 namespace Repository
 {
@@ -123,21 +121,5 @@ namespace Repository
                 }
             });
         }
-
-        //private void CheckDateFormat(FlightInDto flightInDto)
-        //{
-        //    var dateTimeArrival = flightInDto.ArrivalTime.ConvertStringToDateTime();
-        //    var dateTimeDeparture = flightInDto.DepartureTime.ConvertStringToDateTime();
-
-        //    var dateArrivalTimeString = dateTimeArrival.ConvertDateTimeToString();
-        //    var dateDepartureTimeString = dateTimeDeparture.ConvertDateTimeToString();
-
-        //    if (!flightInDto.ArrivalTime.Equals(dateArrivalTimeString)
-        //        || !flightInDto.DepartureTime.Equals(dateDepartureTimeString)
-        //        || dateTimeDeparture >= dateTimeArrival)
-        //    {
-        //        throw new DateFormatException(nameof(FlightRepository), nameof(CheckDateFormat));
-        //    }
-        //}
     }
 }
