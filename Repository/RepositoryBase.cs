@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         protected IAppDbContext _dbContext;
 
-        public RepositoryBase(IAppDbContext dbContext)
+        protected RepositoryBase(IAppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -18,21 +18,19 @@ namespace API.Controllers
             _airportRepository = airportRepository;
             _flightRepository = flightRepository;
         }
+
         [HttpGet("airports")]
         public IActionResult SearchAirports(string search)
         {
-            lock (_lock)
+            try
             {
-                try
-                {
-                    var airports = _airportRepository.SearchAirports(search);
-                    return Ok(airports);
-                }
-                catch (NotFoundException e)
-                {
-                    Console.WriteLine(e);
-                    return Ok();
-                }
+                var airports = _airportRepository.SearchAirports(search);
+                return Ok(airports);
+            }
+            catch (NotFoundException e)
+            {
+                Console.WriteLine(e);
+                return Ok();
             }
         }
 

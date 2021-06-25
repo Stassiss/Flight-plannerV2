@@ -2,41 +2,32 @@
 using System.Linq;
 using Contracts;
 using Entities.DataTransferObjects.Airports;
+using Entities.Models;
 using Repository.Exceptions;
 using Repository.Helpers;
+using Repository.Helpers.Converter;
 
 namespace Repository
 {
-    public class AirportRepository : IAirportRepository
+    public class AirportRepository : RepositoryBase<Airport>, IAirportRepository
     {
-        private readonly IAppDbContext _dbContext;
-        private static readonly object _lock = new object();
-        public AirportRepository(IAppDbContext dbContext)
+        public AirportRepository(IAppDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public List<AirportOutDto> SearchAirports(string search)
         {
-            lock (_lock)
+            var airportsFromDb = FindAll(true).ToList();
+
+            var airports = airportsFromDb.Where(x => x.Country.TrimToLowerString().Contains(search.TrimToLowerString())
+                                                          || x.City.TrimToLowerString().Contains(search.TrimToLowerString())
+                                                          || x.AirportName.TrimToLowerString().Contains(search.TrimToLowerString())).ToList();
+            if (!airports.Any())
             {
-                var airportsFromDb = _dbContext.Airports.ToList();
-
-                var airports = airportsFromDb.Where(x => TrimToLowerString(x.Country).Contains(TrimToLowerString(search))
-                                                              || TrimToLowerString(x.City).Contains(TrimToLowerString(search))
-                                                              || TrimToLowerString(x.AirportName).Contains(TrimToLowerString(search))).ToList();
-                if (!airports.Any())
-                {
-                    throw new NotFoundException(nameof(AirportInDto), nameof(SearchAirports), "no id");
-                }
-
-                return airports.Select(Mapper.MapAirportToAirportOutDto).ToList();
+                throw new NotFoundException(nameof(AirportInDto), nameof(SearchAirports), "no id");
             }
-        }
 
-        private string TrimToLowerString(string str)
-        {
-            return str.ToLower().Trim();
+            return airports.Select(Mapper.MapAirportToAirportOutDto).ToList();
         }
     }
 }
