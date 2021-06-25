@@ -24,7 +24,7 @@ namespace Repository
         {
             lock (_lock)
             {
-                CheckDateFormat(flightInDto);
+                flightInDto.CheckDateFormat();
 
                 flightInDto.CheckIfAirportsAreTheSame();
 
@@ -124,20 +124,20 @@ namespace Repository
             });
         }
 
-        private void CheckDateFormat(FlightInDto flightInDto)
-        {
-            var dateTimeArrival = flightInDto.ArrivalTime.ConvertStringToDateTime();
-            var dateTimeDeparture = flightInDto.DepartureTime.ConvertStringToDateTime();
+        //private void CheckDateFormat(FlightInDto flightInDto)
+        //{
+        //    var dateTimeArrival = flightInDto.ArrivalTime.ConvertStringToDateTime();
+        //    var dateTimeDeparture = flightInDto.DepartureTime.ConvertStringToDateTime();
 
-            var dateArrivalTimeString = dateTimeArrival.ConvertDateTimeToString();
-            var dateDepartureTimeString = dateTimeDeparture.ConvertDateTimeToString();
+        //    var dateArrivalTimeString = dateTimeArrival.ConvertDateTimeToString();
+        //    var dateDepartureTimeString = dateTimeDeparture.ConvertDateTimeToString();
 
-            if (!flightInDto.ArrivalTime.Equals(dateArrivalTimeString)
-                || !flightInDto.DepartureTime.Equals(dateDepartureTimeString)
-                || dateTimeDeparture >= dateTimeArrival)
-            {
-                throw new DateFormatException(nameof(FlightRepository), nameof(CheckDateFormat));
-            }
-        }
+        //    if (!flightInDto.ArrivalTime.Equals(dateArrivalTimeString)
+        //        || !flightInDto.DepartureTime.Equals(dateDepartureTimeString)
+        //        || dateTimeDeparture >= dateTimeArrival)
+        //    {
+        //        throw new DateFormatException(nameof(FlightRepository), nameof(CheckDateFormat));
+        //    }
+        //}
     }
 }

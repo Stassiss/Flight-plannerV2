@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{6FF2B182-95D7-43A6-9888-D637345721D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{1EE9AFEB-A602-4D72-9557-81031E07DF47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBase", "DataBase\DataBase.csproj", "{1EE9AFEB-A602-4D72-9557-81031E07DF47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter", "Converter\Converter.csproj", "{FDA99913-C554-4176-990E-4DCE8E8187AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{1EE9AFEB-A602-4D72-9557-81031E07DF47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EE9AFEB-A602-4D72-9557-81031E07DF47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EE9AFEB-A602-4D72-9557-81031E07DF47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDA99913-C554-4176-990E-4DCE8E8187AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDA99913-C554-4176-990E-4DCE8E8187AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDA99913-C554-4176-990E-4DCE8E8187AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDA99913-C554-4176-990E-4DCE8E8187AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
