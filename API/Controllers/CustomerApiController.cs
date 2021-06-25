@@ -1,6 +1,7 @@
 ﻿using System;
 using Contracts;
 using Entities.DataTransferObjects.Flights;
+using Entities.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Exceptions;
 
@@ -30,7 +31,7 @@ namespace API.Controllers
             catch (NotFoundException e)
             {
                 Console.WriteLine(e);
-                return Ok();
+                return Ok(e.Message);
             }
         }
 
@@ -41,14 +42,13 @@ namespace API.Controllers
             {
                 try
                 {
-                    _flightRepository.CompareAirportsNames(search.From, search.To);
                     var pageResult = _flightRepository.SearchFlights(search);
                     return Ok(pageResult);
                 }
                 catch (SameAirportException e)
                 {
                     Console.WriteLine(e);
-                    return BadRequest();
+                    return BadRequest(e.Message);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace API.Controllers
                 catch (NotFoundException e)
                 {
                     Console.WriteLine(e);
-                    return NotFound();
+                    return NotFound(e.Message);
                 }
             }
         }

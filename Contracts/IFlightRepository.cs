@@ -10,6 +10,5 @@ namespace Contracts
         void Delete(int id);
         void Clear();
         PageResult SearchFlights(FlightSearchRequestDto search);
-        void CompareAirportsNames(string a, string b);
     }
 }

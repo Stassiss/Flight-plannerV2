@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Entities.DataTransferObjects.Airports;
+using Entities.Exceptions;
 
 namespace Entities.DataTransferObjects.Flights
 {
@@ -21,5 +22,13 @@ namespace Entities.DataTransferObjects.Flights
 
         [Required(ErrorMessage = "Required field!")]
         public string ArrivalTime { get; set; }
+
+        public void CheckIfAirportsAreTheSame()
+        {
+            if (From.AirportName.Trim().ToLower().Equals(To.AirportName.Trim().ToLower()))
+            {
+                throw new SameAirportException();
+            }
+        }
     }
 }

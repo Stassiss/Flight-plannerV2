@@ -1,6 +1,7 @@
 ﻿using System;
 using Contracts;
 using Entities.DataTransferObjects.Flights;
+using Entities.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Exceptions;
@@ -29,7 +30,7 @@ namespace API.Controllers
             catch (NotFoundException e)
             {
                 Console.WriteLine(e);
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
 
@@ -45,17 +46,17 @@ namespace API.Controllers
             catch (SameFlightException e)
             {
                 Console.WriteLine(e);
-                return Conflict();
+                return Conflict(e.Message);
             }
             catch (SameAirportException e)
             {
                 Console.WriteLine(e);
-                return BadRequest();
+                return BadRequest(e.Message);
             }
             catch (DateFormatException e)
             {
                 Console.WriteLine(e);
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 

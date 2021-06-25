@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Entities.Exceptions;
 
 namespace Entities.DataTransferObjects.Flights
 {
@@ -12,5 +13,13 @@ namespace Entities.DataTransferObjects.Flights
 
         [Required]
         public string DepartureDate { get; set; }
+
+        public void CheckIfAirportsAreTheSame()
+        {
+            if (From.Trim().ToLower().Equals(To.Trim().ToLower()))
+            {
+                throw new SameAirportException();
+            }
+        }
     }
 }
