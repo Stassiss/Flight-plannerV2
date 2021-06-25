@@ -106,37 +106,27 @@ namespace Repository
 
         private void CheckIfFlightInDb(FlightInDto flightInDto)
         {
-            var exists = CompareFlights(flightInDto);
-
-            if (exists)
-            {
-                throw new SameFlightException(nameof(FlightRepository), nameof(CheckIfFlightInDb));
-            }
-        }
-
-        private bool CompareFlights(FlightInDto flight)
-        {
             var flights = FindAll(true)
                 .Include(f => f.From)
                 .Include(f => f.To)
                 .ToList();
 
-            return flights.Any(x =>
+            flights.ForEach(x =>
             {
-                if (x.ArrivalTime.ConvertDateTimeToString() != flight.ArrivalTime ||
-                    x.DepartureTime.ConvertDateTimeToString() != flight.DepartureTime) return false;
+                if (x.ArrivalTime.ConvertDateTimeToString() != flightInDto.ArrivalTime ||
+                    x.DepartureTime.ConvertDateTimeToString() != flightInDto.DepartureTime) return;
 
-                if (!string.Equals(x.Carrier.TrimToLowerString(), flight.Carrier.TrimToLowerString())) return false;
+                if (!string.Equals(x.Carrier.TrimToLowerString(), flightInDto.Carrier.TrimToLowerString())) return;
 
                 try
                 {
-                    CompareAirportsNames(x.From.AirportName, flight.From.AirportName);
-                    return false;
+                    CompareAirportsNames(x.From.AirportName, flightInDto.From.AirportName);
+                    return;
                 }
                 catch (SameAirportException e)
                 {
                     Console.WriteLine(e);
-                    return true;
+                    throw new SameFlightException(nameof(FlightRepository), nameof(CheckIfFlightInDb));
                 }
             });
         }
