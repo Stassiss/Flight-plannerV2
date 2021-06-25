@@ -2,11 +2,12 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Contracts;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
-    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : Entity
     {
         protected IAppDbContext _dbContext;
 

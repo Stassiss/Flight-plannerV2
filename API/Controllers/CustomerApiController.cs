@@ -35,7 +35,7 @@ namespace API.Controllers
         }
 
         [HttpPost("flights/search")]
-        public IActionResult SearchFlights([FromBody] SearchRequestDto search)
+        public IActionResult SearchFlights([FromBody] FlightSearchRequestDto search)
         {
             lock (_lock)
             {

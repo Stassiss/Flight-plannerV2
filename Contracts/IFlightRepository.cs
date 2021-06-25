@@ -9,7 +9,7 @@ namespace Contracts
         FlightOutDto GetFlightById(int id);
         void Delete(int id);
         void Clear();
-        PageResult SearchFlights(SearchRequestDto search);
+        PageResult SearchFlights(FlightSearchRequestDto search);
         void CompareAirportsNames(string a, string b);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Entities.DataTransferObjects.Flights
 {
-    public class SearchRequestDto
+    public class FlightSearchRequestDto
     {
         [Required]
         public string From { get; set; }
