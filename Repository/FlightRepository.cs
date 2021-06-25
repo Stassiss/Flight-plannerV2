@@ -3,6 +3,7 @@ using System.Linq;
 using Contracts;
 using Entities;
 using Entities.DataTransferObjects.Flights;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Exceptions;
@@ -25,8 +26,7 @@ namespace Repository
             {
                 CheckDateFormat(flightInDto);
 
-                CompareAirportsNames(flightInDto.From.AirportName,
-                    flightInDto.To.AirportName);
+                flightInDto.CheckIfAirportsAreTheSame();
 
                 CheckIfFlightInDb(flightInDto);
 
@@ -49,10 +49,7 @@ namespace Repository
 
             if (flight == null)
             {
-                throw new NotFoundException(
-                    nameof(FlightRepository),
-                    nameof(GetFlightById),
-                    $"{id}");
+                throw new NotFoundException($"{id}");
             }
 
             var flightOutDto = Mapper.MapFlightToFlightOutDto(flight);
@@ -68,7 +65,7 @@ namespace Repository
 
             if (flight == null)
             {
-                throw new NotFoundException(nameof(FlightRepository), nameof(Delete), $"{id}");
+                throw new NotFoundException($"{id}");
             }
 
             _dbContext.Airports.Remove(flight.To);
@@ -87,6 +84,8 @@ namespace Repository
 
         public PageResult SearchFlights(FlightSearchRequestDto search)
         {
+            search.CheckIfAirportsAreTheSame();
+
             var flightsFromDb = FindAll(true)
                 .Include(f => f.From)
                 .Include(f => f.To)
@@ -118,25 +117,11 @@ namespace Repository
 
                 if (!string.Equals(x.Carrier.TrimToLowerString(), flightInDto.Carrier.TrimToLowerString())) return;
 
-                try
+                if (x.From.AirportName.TrimToLowerString().Equals(flightInDto.From.AirportName.TrimToLowerString()))
                 {
-                    CompareAirportsNames(x.From.AirportName, flightInDto.From.AirportName);
-                    return;
-                }
-                catch (SameAirportException e)
-                {
-                    Console.WriteLine(e);
-                    throw new SameFlightException(nameof(FlightRepository), nameof(CheckIfFlightInDb));
+                    throw new SameFlightException();
                 }
             });
-        }
-
-        public void CompareAirportsNames(string a, string b)
-        {
-            if (string.Equals(a.TrimToLowerString(), b.TrimToLowerString()))
-            {
-                throw new SameAirportException(nameof(FlightRepository), nameof(CompareAirportsNames));
-            }
         }
 
         private void CheckDateFormat(FlightInDto flightInDto)

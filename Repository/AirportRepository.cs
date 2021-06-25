@@ -24,7 +24,7 @@ namespace Repository
                                                           || x.AirportName.TrimToLowerString().Contains(search.TrimToLowerString())).ToList();
             if (!airports.Any())
             {
-                throw new NotFoundException(nameof(AirportInDto), nameof(SearchAirports), "no id");
+                throw new NotFoundException();
             }
 
             return airports.Select(Mapper.MapAirportToAirportOutDto).ToList();
