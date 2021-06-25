@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Models
 {
-    public class Flight
+    public class Flight : Entity
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Required field!")]
         public Airport From { get; set; }
 

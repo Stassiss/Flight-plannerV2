@@ -99,7 +99,7 @@ namespace Repository
             }
         }
 
-        public PageResult SearchFlights(SearchRequestDto search)
+        public PageResult SearchFlights(FlightSearchRequestDto search)
         {
             lock (_lock)
             {

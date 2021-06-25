@@ -2,10 +2,8 @@
 
 namespace Entities.Models
 {
-    public class Airport
+    public class Airport : Entity
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Required field!")]
         public string Country { get; set; }
 

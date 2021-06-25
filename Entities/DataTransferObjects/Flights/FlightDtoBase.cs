@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Entities.DataTransferObjects.Airports;
 
 namespace Entities.DataTransferObjects.Flights
 {
-    public abstract class FlightDtoBase<T>
+    public abstract class FlightDtoBase<T> where T : AirportDtoBase
     {
         public int Id { get; set; }
 
