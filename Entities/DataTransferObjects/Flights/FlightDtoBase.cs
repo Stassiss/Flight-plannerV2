@@ -26,7 +26,7 @@ namespace Entities.DataTransferObjects.Flights
 
         public void CheckIfAirportsAreTheSame()
         {
-            if (From.AirportName.Trim().ToLower().Equals(To.AirportName.Trim().ToLower()))
+            if (From.AirportName.TrimToLowerString().Equals(To.AirportName.TrimToLowerString()))
             {
                 throw new SameAirportException();
             }

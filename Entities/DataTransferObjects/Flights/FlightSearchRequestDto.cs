@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Converter;
 using Entities.Exceptions;
 
 namespace Entities.DataTransferObjects.Flights
@@ -16,7 +17,7 @@ namespace Entities.DataTransferObjects.Flights
 
         public void CheckIfAirportsAreTheSame()
         {
-            if (From.Trim().ToLower().Equals(To.Trim().ToLower()))
+            if (From.TrimToLowerString().Equals(To.TrimToLowerString()))
             {
                 throw new SameAirportException();
             }
