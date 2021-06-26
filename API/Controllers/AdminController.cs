@@ -17,20 +17,12 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("flights/{id}", Name = "Flight")]
-        public IActionResult GetFlightsById(int id)
-        {
-            var flightOutDto = _repository.GetFlightById(id);
+        public IActionResult GetFlightsById(int id) => Ok(_repository.GetFlightById(id));
 
-            return Ok(flightOutDto);
-        }
 
         [HttpPut("flights")]
-        public IActionResult PutFlight([FromBody] FlightInDto flightInDto)
-        {
-            var flightOutDto = _repository.PutFlight(flightInDto);
+        public IActionResult PutFlight([FromBody] FlightInDto flightInDto) => Created("Flight", _repository.PutFlight(flightInDto));
 
-            return Created("Flight", flightOutDto);
-        }
 
         [HttpDelete("flights/{id}")]
         public IActionResult Delete(int id)

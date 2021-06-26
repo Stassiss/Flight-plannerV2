@@ -1,9 +1,6 @@
-﻿using System;
-using Contracts;
+﻿using Contracts;
 using Entities.DataTransferObjects.Flights;
-using Entities.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Exceptions;
 
 namespace API.Controllers
 {
@@ -20,27 +17,15 @@ namespace API.Controllers
         }
 
         [HttpGet("airports")]
-        public IActionResult SearchAirports(string search)
-        {
-            var airports = _airportRepository.SearchAirports(search);
+        public IActionResult SearchAirports(string search) => Ok(_airportRepository.SearchAirports(search));
 
-            return Ok(airports);
-        }
 
         [HttpPost("flights/search")]
-        public IActionResult SearchFlights([FromBody] FlightSearchRequestDto search)
-        {
-            var pageResult = _flightRepository.SearchFlights(search);
+        public IActionResult SearchFlights([FromBody] FlightSearchRequestDto search) => Ok(_flightRepository.SearchFlights(search));
 
-            return Ok(pageResult);
-        }
 
         [HttpGet("flights/{id}")]
-        public IActionResult GetFlightsById(int id)
-        {
-            var flightOutDto = _flightRepository.GetFlightById(id);
+        public IActionResult GetFlightsById(int id) => Ok(_flightRepository.GetFlightById(id));
 
-            return Ok(flightOutDto);
-        }
     }
 }
