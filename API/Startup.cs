@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Filters;
 using API.Helper.Auth;
 using Contracts;
 using DataBase;
@@ -26,7 +27,10 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                config.Filters.Add(typeof(ExceptionsFilter));
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });

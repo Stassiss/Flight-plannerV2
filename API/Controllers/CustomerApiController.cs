@@ -13,7 +13,6 @@ namespace API.Controllers
     {
         private readonly IAirportRepository _airportRepository;
         private readonly IFlightRepository _flightRepository;
-        private static readonly object _lock = new object();
         public CustomerApiController(IAirportRepository airportRepository, IFlightRepository flightRepository)
         {
             _airportRepository = airportRepository;
@@ -23,52 +22,25 @@ namespace API.Controllers
         [HttpGet("airports")]
         public IActionResult SearchAirports(string search)
         {
-            try
-            {
-                var airports = _airportRepository.SearchAirports(search);
-                return Ok(airports);
-            }
-            catch (NotFoundException e)
-            {
-                Console.WriteLine(e);
-                return Ok(e.Message);
-            }
+            var airports = _airportRepository.SearchAirports(search);
+
+            return Ok(airports);
         }
 
         [HttpPost("flights/search")]
         public IActionResult SearchFlights([FromBody] FlightSearchRequestDto search)
         {
-            lock (_lock)
-            {
-                try
-                {
-                    var pageResult = _flightRepository.SearchFlights(search);
-                    return Ok(pageResult);
-                }
-                catch (SameAirportException e)
-                {
-                    Console.WriteLine(e);
-                    return BadRequest(e.Message);
-                }
-            }
+            var pageResult = _flightRepository.SearchFlights(search);
+
+            return Ok(pageResult);
         }
 
         [HttpGet("flights/{id}")]
         public IActionResult GetFlightsById(int id)
         {
-            lock (_lock)
-            {
-                try
-                {
-                    var flightOutDto = _flightRepository.GetFlightById(id);
-                    return Ok(flightOutDto);
-                }
-                catch (NotFoundException e)
-                {
-                    Console.WriteLine(e);
-                    return NotFound(e.Message);
-                }
-            }
+            var flightOutDto = _flightRepository.GetFlightById(id);
+
+            return Ok(flightOutDto);
         }
     }
 }

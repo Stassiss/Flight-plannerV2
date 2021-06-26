@@ -4,8 +4,7 @@ using Contracts;
 using Converter;
 using Entities.DataTransferObjects.Airports;
 using Entities.Models;
-using Repository.Exceptions;
-using Repository.Helpers;
+using Repository.Mapper;
 
 namespace Repository
 {
@@ -22,12 +21,8 @@ namespace Repository
             var airports = airportsFromDb.Where(x => x.Country.TrimToLowerString().Contains(search.TrimToLowerString())
                                                           || x.City.TrimToLowerString().Contains(search.TrimToLowerString())
                                                           || x.AirportName.TrimToLowerString().Contains(search.TrimToLowerString())).ToList();
-            if (!airports.Any())
-            {
-                throw new NotFoundException();
-            }
 
-            return airports.Select(Mapper.MapAirportToAirportOutDto).ToList();
+            return airports.Select(Map.MapAirportToAirportOutDto).ToList();
         }
     }
 }
