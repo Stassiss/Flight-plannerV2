@@ -3,9 +3,9 @@ using Entities.DataTransferObjects.Airports;
 using Entities.DataTransferObjects.Flights;
 using Entities.Models;
 
-namespace Repository.Helpers
+namespace Repository.Mapper
 {
-    public static class Mapper
+    public static class Map
     {
         public static AirportOutDto MapAirportToAirportOutDto(Airport airport)
         {

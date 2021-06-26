@@ -6,7 +6,7 @@ using Entities.DataTransferObjects.Flights;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Exceptions;
-using Repository.Helpers;
+using Repository.Mapper;
 
 namespace Repository
 {
@@ -28,12 +28,12 @@ namespace Repository
 
                 CheckIfFlightInDb(flightInDto);
 
-                var flight = Mapper.MapFlightInDtoToFlight(flightInDto);
+                var flight = Map.MapFlightInDtoToFlight(flightInDto);
 
                 Update(flight);
                 _dbContext.SaveChanges();
 
-                var flightOutDto = Mapper.MapFlightToFlightOutDto(flight);
+                var flightOutDto = Map.MapFlightToFlightOutDto(flight);
 
                 return flightOutDto;
             }
@@ -50,7 +50,7 @@ namespace Repository
                 throw new NotFoundException($"{id}");
             }
 
-            var flightOutDto = Mapper.MapFlightToFlightOutDto(flight);
+            var flightOutDto = Map.MapFlightToFlightOutDto(flight);
 
             return flightOutDto;
         }
@@ -61,10 +61,7 @@ namespace Repository
                 .Include(f => f.From)
                 .Include(f => f.To).FirstOrDefault();
 
-            if (flight == null)
-            {
-                throw new NotFoundException($"{id}");
-            }
+            if (flight == null) return;
 
             _dbContext.Airports.Remove(flight.To);
             _dbContext.Airports.Remove(flight.From);
@@ -94,7 +91,7 @@ namespace Repository
                      && x.From.AirportName.TrimToLowerString() == search.From.TrimToLowerString()
                      && x.To.AirportName.TrimToLowerString() == search.To.TrimToLowerString()).ToList();
 
-            var flightsOutDto = flights.Select(Mapper.MapFlightToFlightOutDto).ToList();
+            var flightsOutDto = flights.Select(Map.MapFlightToFlightOutDto).ToList();
 
             var result = new PageResult(flightsOutDto);
 
