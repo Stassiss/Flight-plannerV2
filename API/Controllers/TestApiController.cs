@@ -15,9 +15,7 @@ namespace API.Controllers
         }
 
         [HttpPost("clear")]
-        public void Delete()
-        {
-            _flightRepository.Clear();
-        }
+        public void Delete() => _flightRepository.Clear();
+
     }
 }

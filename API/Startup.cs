@@ -1,9 +1,7 @@
 using API.Extensions;
 using API.Filters;
-using API.Helper.Auth;
 using Contracts;
 using DataBase;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +21,6 @@ namespace API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -31,19 +28,14 @@ namespace API
             {
                 config.Filters.Add(typeof(ExceptionsFilter));
             });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
-            // Add database
             services.ConfigureSqlContext(Configuration);
-
-            // configure basic authentication 
-            services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
-            // configure DI for application services
+            services.ConfigureAuth();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAirportRepository, AirportRepository>();
@@ -52,7 +44,6 @@ namespace API
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
