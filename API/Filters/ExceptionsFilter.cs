@@ -28,26 +28,27 @@ namespace API.Filters
             else if (exceptionType == typeof(SameAirportException))
             {
                 message = context.Exception.Message;
-                Console.WriteLine(message + "\n " + context.Exception.StackTrace);
                 status = HttpStatusCode.BadRequest;
             }
             else if (exceptionType == typeof(SameFlightException))
             {
                 message = context.Exception.Message;
-                Console.WriteLine(message + "\n " + context.Exception.StackTrace);
                 status = HttpStatusCode.Conflict;
             }
             else if (exceptionType == typeof(DateFormatException))
             {
                 message = context.Exception.Message;
-                Console.WriteLine(message + "\n " + context.Exception.StackTrace);
                 status = HttpStatusCode.BadRequest;
             }
             else if (exceptionType == typeof(NotFoundException))
             {
                 message = context.Exception.Message;
-                Console.WriteLine(message + "\n " + context.Exception.StackTrace);
                 status = HttpStatusCode.NotFound;
+            }
+            else
+            {
+                message = context.Exception.Message;
+                Console.WriteLine(message + "\n" + context.Exception.StackTrace);
             }
 
             context.ExceptionHandled = true;
@@ -58,6 +59,5 @@ namespace API.Filters
             var err = message;
             response.WriteAsync(err);
         }
-
     }
 }

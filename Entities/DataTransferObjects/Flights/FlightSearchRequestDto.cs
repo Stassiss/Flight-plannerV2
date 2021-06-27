@@ -15,6 +15,10 @@ namespace Entities.DataTransferObjects.Flights
         [Required]
         public string DepartureDate { get; set; }
 
+
+        /// <summary>
+        /// If Airports are the same throws SameAirportException
+        /// </summary>
         public void CheckIfAirportsAreTheSame()
         {
             if (From.TrimToLowerString().Equals(To.TrimToLowerString()))
