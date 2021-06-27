@@ -22,5 +22,13 @@ namespace Repository
 
             return airportsFromDb.Select(Map.MapAirportToAirportOutDto).ToList();
         }
+
+        public new void Clear() => base.Clear();
+
+        public new void Delete(Airport airport)
+        {
+            base.Delete(airport);
+            Save();
+        }
     }
 }

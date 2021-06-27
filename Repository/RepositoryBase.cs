@@ -9,7 +9,7 @@ namespace Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : Entity
     {
-        protected IAppDbContext _dbContext;
+        private IAppDbContext _dbContext;
 
         protected RepositoryBase(IAppDbContext dbContext)
         {
@@ -33,10 +33,8 @@ namespace Repository
         public void Update(T entity) => _dbContext.Set<T>().Update(entity);
         public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+        public void Save() => _dbContext.SaveChanges();
 
+        public void Clear() => _dbContext.Set<T>().RemoveRange(_dbContext.Set<T>());
     }
 }

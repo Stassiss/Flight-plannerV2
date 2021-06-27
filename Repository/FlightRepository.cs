@@ -12,10 +12,12 @@ namespace Repository
 {
     public class FlightRepository : RepositoryBase<Flight>, IFlightRepository
     {
+        private readonly IAirportRepository _airportRepository;
         private static readonly object _lock = new object();
 
-        public FlightRepository(IAppDbContext dbContext) : base(dbContext)
+        public FlightRepository(IAppDbContext dbContext, IAirportRepository airportRepository) : base(dbContext)
         {
+            _airportRepository = airportRepository;
         }
 
         public FlightOutDto PutFlight(FlightInDto flightInDto)
@@ -59,17 +61,17 @@ namespace Repository
 
             if (flight == null) return;
 
-            _dbContext.Airports.Remove(flight.To);
-            _dbContext.Airports.Remove(flight.From);
+            _airportRepository.Delete(flight.To);
+            _airportRepository.Delete(flight.From);
 
             Delete(flight);
             Save();
         }
 
-        public void Clear()
+        public new void Clear()
         {
-            _dbContext.Airports.RemoveRange(_dbContext.Airports);
-            _dbContext.Flights.RemoveRange(_dbContext.Flights);
+            _airportRepository.Clear();
+            base.Clear();
             Save();
         }
 
