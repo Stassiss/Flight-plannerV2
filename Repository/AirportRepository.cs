@@ -16,13 +16,11 @@ namespace Repository
 
         public List<AirportOutDto> SearchAirports(string search)
         {
-            var airportsFromDb = FindAll(true).ToList();
+            var airportsFromDb = FindByCondition(x => x.Country.Trim().ToLower().Contains(search.TrimToLowerString())
+                                                      || x.City.Trim().ToLower().Contains(search.TrimToLowerString())
+                                                      || x.AirportName.Trim().ToLower().Contains(search.TrimToLowerString()), true).ToList();
 
-            var airports = airportsFromDb.Where(x => x.Country.TrimToLowerString().Contains(search.TrimToLowerString())
-                                                          || x.City.TrimToLowerString().Contains(search.TrimToLowerString())
-                                                          || x.AirportName.TrimToLowerString().Contains(search.TrimToLowerString())).ToList();
-
-            return airports.Select(Map.MapAirportToAirportOutDto).ToList();
+            return airportsFromDb.Select(Map.MapAirportToAirportOutDto).ToList();
         }
     }
 }

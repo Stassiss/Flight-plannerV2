@@ -31,7 +31,7 @@ namespace Repository
                 var flight = Map.MapFlightInDtoToFlight(flightInDto);
 
                 Update(flight);
-                _dbContext.SaveChanges();
+                Save();
 
                 var flightOutDto = Map.MapFlightToFlightOutDto(flight);
 
@@ -41,9 +41,7 @@ namespace Repository
 
         public FlightOutDto GetFlightById(int id)
         {
-            var flight = FindByCondition(x => x.Id == id, true)
-                .Include(f => f.From)
-                .Include(f => f.To).FirstOrDefault();
+            var flight = GetFlightFromDbById(id);
 
             if (flight == null)
             {
@@ -57,9 +55,7 @@ namespace Repository
 
         public void Delete(int id)
         {
-            var flight = FindByCondition(x => x.Id == id, true)
-                .Include(f => f.From)
-                .Include(f => f.To).FirstOrDefault();
+            var flight = GetFlightFromDbById(id);
 
             if (flight == null) return;
 
@@ -67,56 +63,59 @@ namespace Repository
             _dbContext.Airports.Remove(flight.From);
 
             Delete(flight);
-            _dbContext.SaveChanges();
+            Save();
         }
 
         public void Clear()
         {
             _dbContext.Airports.RemoveRange(_dbContext.Airports);
             _dbContext.Flights.RemoveRange(_dbContext.Flights);
-            _dbContext.SaveChanges();
+            Save();
         }
 
         public PageResult SearchFlights(FlightSearchRequestDto search)
         {
             search.CheckIfAirportsAreTheSame();
 
-            var flightsFromDb = FindAll(true)
-                .Include(f => f.From)
-                .Include(f => f.To)
+            var flightsFromDb = FindByCondition(x => x.DepartureTime.Date == search.DepartureDate.ConvertStringToDateTime().Date, true)
+                .Include(f => f.From).Where(x => x.From.AirportName.Trim().ToLower() == search.From.TrimToLowerString())
+                .Include(f => f.To).Where(x => x.To.AirportName.Trim().ToLower() == search.To.TrimToLowerString())
                 .ToList();
 
-            var flights = flightsFromDb.Where(
-                x => x.DepartureTime.ConvertDateTimeToString().Substring(0, 10) == search.DepartureDate
-                     && x.From.AirportName.TrimToLowerString() == search.From.TrimToLowerString()
-                     && x.To.AirportName.TrimToLowerString() == search.To.TrimToLowerString()).ToList();
+            var flightsOutDto = flightsFromDb.Select(Map.MapFlightToFlightOutDto).ToList();
 
-            var flightsOutDto = flights.Select(Map.MapFlightToFlightOutDto).ToList();
-
-            var result = new PageResult(flightsOutDto);
-
-            return result;
+            return new PageResult(flightsOutDto);
         }
 
-        private void CheckIfFlightInDb(FlightInDto flightInDto)
+        private Flight GetFlightFromDbById(int id)
         {
-            var flights = FindAll(true)
+            return FindByCondition(x => x.Id == id, true)
                 .Include(f => f.From)
                 .Include(f => f.To)
-                .ToList();
+                .FirstOrDefault();
+        }
 
-            flights.ForEach(x =>
+        /// <summary>
+        /// if flight exists throws SameFlightException
+        /// </summary>
+        /// <param name="flightInDto"></param>
+        private void CheckIfFlightInDb(FlightInDto flightInDto)
+        {
+            var flights = FindByCondition(x => x.ArrivalTime == flightInDto.ArrivalTime.ConvertStringToDateTime() &&
+                                                   x.DepartureTime ==
+                                                   flightInDto.DepartureTime.ConvertStringToDateTime()
+                                                   && x.Carrier.Trim().ToLower() ==
+                                                   flightInDto.Carrier.TrimToLowerString(), true);
+            if (!flights.Any()) return;
+
+            var airportExists = flights
+                .Include(f => f.From)
+                .Any(f => f.From.AirportName.Trim().ToLower() == flightInDto.From.AirportName.TrimToLowerString());
+
+            if (airportExists)
             {
-                if (x.ArrivalTime.ConvertDateTimeToString() != flightInDto.ArrivalTime ||
-                    x.DepartureTime.ConvertDateTimeToString() != flightInDto.DepartureTime) return;
-
-                if (!string.Equals(x.Carrier.TrimToLowerString(), flightInDto.Carrier.TrimToLowerString())) return;
-
-                if (x.From.AirportName.TrimToLowerString().Equals(flightInDto.From.AirportName.TrimToLowerString()))
-                {
-                    throw new SameFlightException();
-                }
-            });
+                throw new SameFlightException();
+            }
         }
     }
 }

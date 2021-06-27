@@ -8,9 +8,5 @@ namespace Repository.Exceptions
             : base($"Id {id} not found!")
         {
         }
-        public NotFoundException()
-            : base($"Nothing found!")
-        {
-        }
     }
 }

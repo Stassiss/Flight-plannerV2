@@ -24,6 +24,9 @@ namespace Entities.DataTransferObjects.Flights
         [Required(ErrorMessage = "Required field!")]
         public string ArrivalTime { get; set; }
 
+        /// <summary>
+        /// If From.AirportName is the same as To.AirportName throws SameAirportException
+        /// </summary>
         public void CheckIfAirportsAreTheSame()
         {
             if (From.AirportName.TrimToLowerString().Equals(To.AirportName.TrimToLowerString()))
@@ -32,6 +35,12 @@ namespace Entities.DataTransferObjects.Flights
             }
         }
 
+        /// <summary>
+        /// If DepartureTime or ArrivalTime is not in correct format ("yyyy-MM-dd HH:mm")
+        /// or
+        /// DepartureTime is grater or equal to ArrivalTime
+        /// throws DateFormatException
+        /// </summary>
         public void CheckDateFormat()
         {
             var dateTimeArrival = ArrivalTime.ConvertStringToDateTime();
