@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Contracts;
 using Converter;
 using Entities;
 using Entities.DataTransferObjects.Flights;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Exceptions;
@@ -26,7 +28,6 @@ namespace Repository
             lock (_lock)
             {
                 CheckIfFlightInDb(flightInDto);
-
                 var flight = Map.MapFlightInDtoToFlight(flightInDto);
 
                 Update(flight);
