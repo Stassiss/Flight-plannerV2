@@ -20,13 +20,12 @@ namespace Repository
             _airportRepository = airportRepository;
         }
 
+
         public FlightOutDto PutFlight(FlightInDto flightInDto)
         {
             lock (_lock)
             {
                 flightInDto.CheckDateFormat();
-
-                flightInDto.CheckIfAirportsAreTheSame();
 
                 CheckIfFlightInDb(flightInDto);
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Converter;
+using Entities.Attributes;
 using Entities.DataTransferObjects.Airports;
 using Entities.Exceptions;
 
@@ -12,7 +13,7 @@ namespace Entities.DataTransferObjects.Flights
         [Required(ErrorMessage = "Required field!")]
         public T From { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
+        [Required(ErrorMessage = "Required field!"), ValidateAirportsAreNotTheSame("From")]
         public T To { get; set; }
 
         [Required(ErrorMessage = "Required field!")]
@@ -24,16 +25,6 @@ namespace Entities.DataTransferObjects.Flights
         [Required(ErrorMessage = "Required field!")]
         public string ArrivalTime { get; set; }
 
-        /// <summary>
-        /// If From.AirportName is the same as To.AirportName throws SameAirportException
-        /// </summary>
-        public void CheckIfAirportsAreTheSame()
-        {
-            if (From.AirportName.TrimToLowerString().Equals(To.AirportName.TrimToLowerString()))
-            {
-                throw new SameAirportException();
-            }
-        }
 
         /// <summary>
         /// If DepartureTime or ArrivalTime is not in correct format ("yyyy-MM-dd HH:mm")
