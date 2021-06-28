@@ -1,30 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Converter;
-using Entities.Exceptions;
+using Entities.Attributes;
 
 namespace Entities.DataTransferObjects.Flights
 {
     public class FlightSearchRequestDto
     {
-        [Required]
+        [Required(ErrorMessage = "Required field!")]
         public string From { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Required field!"), ValidateAirportsAreNotTheSame("From")]
         public string To { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Required field!")]
         public string DepartureDate { get; set; }
-
-
-        /// <summary>
-        /// If Airports are the same throws SameAirportException
-        /// </summary>
-        public void CheckIfAirportsAreTheSame()
-        {
-            if (From.TrimToLowerString().Equals(To.TrimToLowerString()))
-            {
-                throw new SameAirportException();
-            }
-        }
     }
 }
