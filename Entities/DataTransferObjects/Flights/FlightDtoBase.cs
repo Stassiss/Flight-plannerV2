@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Converter;
 using Entities.Attributes;
 using Entities.DataTransferObjects.Airports;
-using Entities.Exceptions;
 
 namespace Entities.DataTransferObjects.Flights
 {
@@ -22,38 +20,7 @@ namespace Entities.DataTransferObjects.Flights
         [Required(ErrorMessage = "Required field!")]
         public string DepartureTime { get; set; }
 
-        [Required(ErrorMessage = "Required field!")]
+        [Required(ErrorMessage = "Required field!"), ValidateDate("DepartureTime")]
         public string ArrivalTime { get; set; }
-
-
-        /// <summary>
-        /// If DepartureTime or ArrivalTime is not in correct format ("yyyy-MM-dd HH:mm")
-        /// or
-        /// DepartureTime is grater or equal to ArrivalTime
-        /// throws DateFormatException
-        /// </summary>
-        public void CheckDateFormat()
-        {
-            var dateTimeArrival = ArrivalTime.ConvertStringToDateTime();
-            var dateTimeDeparture = DepartureTime.ConvertStringToDateTime();
-
-            var dateArrivalTimeString = dateTimeArrival.ConvertDateTimeToString();
-            var dateDepartureTimeString = dateTimeDeparture.ConvertDateTimeToString();
-
-            if (!ArrivalTime.Equals(dateArrivalTimeString))
-            {
-                throw new DateFormatException("Arrival time is not in correct format!");
-            }
-
-            if (!DepartureTime.Equals(dateDepartureTimeString))
-            {
-                throw new DateFormatException("Departure time is not in correct format!");
-            }
-
-            if (dateTimeDeparture >= dateTimeArrival)
-            {
-                throw new DateFormatException("Departure time cannot be grater or equal to arrival time!");
-            }
-        }
     }
 }

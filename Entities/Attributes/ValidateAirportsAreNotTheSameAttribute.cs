@@ -7,6 +7,7 @@ using Entities.Exceptions;
 
 namespace Entities.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property)]
     public class ValidateAirportsAreNotTheSameAttribute : ValidationAttribute
     {
         private readonly string _from;
