@@ -25,8 +25,6 @@ namespace Repository
         {
             lock (_lock)
             {
-                flightInDto.CheckDateFormat();
-
                 CheckIfFlightInDb(flightInDto);
 
                 var flight = Map.MapFlightInDtoToFlight(flightInDto);
