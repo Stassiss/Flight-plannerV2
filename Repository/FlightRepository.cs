@@ -77,8 +77,6 @@ namespace Repository
 
         public PageResult SearchFlights(FlightSearchRequestDto search)
         {
-            search.CheckIfAirportsAreTheSame();
-
             var flightsFromDb = FindByCondition(x => x.DepartureTime.Date == search.DepartureDate.ConvertStringToDateTime().Date, true)
                 .Include(f => f.From).Where(x => x.From.AirportName.Trim().ToLower() == search.From.TrimToLowerString())
                 .Include(f => f.To).Where(x => x.To.AirportName.Trim().ToLower() == search.To.TrimToLowerString())
