@@ -1,5 +1,5 @@
+using API.ExceptionFilters;
 using API.Extensions;
-using API.Filters;
 using Contracts;
 using DataBase;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +26,12 @@ namespace API
 
             services.AddControllers(config =>
             {
-                config.Filters.Add(typeof(ExceptionsFilter));
+                config.Filters.Add(typeof(UnexpectedExceptionsFilter));
+                config.Filters.Add(typeof(NotImplementedExceptionFilter));
+                config.Filters.Add(typeof(NotFoundExceptionFilter));
+                config.Filters.Add(typeof(SameAirportExceptionFilter));
+                config.Filters.Add(typeof(SameFlightExceptionFilter));
+                config.Filters.Add(typeof(DateFormatExceptionFilter));
             });
 
             services.AddSwaggerGen(c =>
