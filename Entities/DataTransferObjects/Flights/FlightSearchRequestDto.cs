@@ -8,7 +8,7 @@ namespace Entities.DataTransferObjects.Flights
         [Required(ErrorMessage = "Required field!")]
         public string From { get; set; }
 
-        [Required(ErrorMessage = "Required field!"), ValidateAirportsNamesAreNotTheSame("From")]
+        [Required(ErrorMessage = "Required field!"), ValidateFlightSearchRequestAirports("From")]
         public string To { get; set; }
 
         [Required(ErrorMessage = "Required field!")]

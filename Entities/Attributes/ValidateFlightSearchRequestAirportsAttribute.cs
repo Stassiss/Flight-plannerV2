@@ -6,11 +6,11 @@ using Entities.Exceptions;
 namespace Entities.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ValidateAirportsNamesAreNotTheSameAttribute : ValidationAttribute
+    public class ValidateFlightSearchRequestAirportsAttribute : ValidationAttribute
     {
         private readonly string _from;
 
-        public ValidateAirportsNamesAreNotTheSameAttribute(string from)
+        public ValidateFlightSearchRequestAirportsAttribute(string from)
         {
             _from = from;
         }
