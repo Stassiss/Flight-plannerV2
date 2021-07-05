@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using API.ExceptionFilters;
+using API.Extensions;
+using Contracts;
+using DataBase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Repository;
 
 namespace API
 {
@@ -22,18 +21,34 @@ namespace API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                config.Filters.Add(typeof(UnexpectedExceptionsFilter));
+                config.Filters.Add(typeof(NotImplementedExceptionFilter));
+                config.Filters.Add(typeof(NotFoundExceptionFilter));
+                config.Filters.Add(typeof(SameAirportExceptionFilter));
+                config.Filters.Add(typeof(SameFlightExceptionFilter));
+                config.Filters.Add(typeof(DateFormatExceptionFilter));
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
+
+            services.ConfigureSqlContext(Configuration);
+            services.ConfigureAuth();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAirportRepository, AirportRepository>();
+            services.AddScoped<IFlightRepository, FlightRepository>();
+            services.AddScoped<IAppDbContext, AppDbContext>();
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -44,6 +59,8 @@ namespace API
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
